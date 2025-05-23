@@ -118,6 +118,7 @@ h3 {
   justify-content: center;
   padding: 2rem 0 3rem 0;
   perspective: 1000px;
+  overflow: visible;
 }
 
 .scroll-container {

@@ -83,24 +83,74 @@ $(document).ready(function() {
       container.css('transform', `translateX(${offset}px)`);
     }
     
-    function goLeft() {
-      current = (current - 1 + cardsData.length) % cardsData.length;
-      updateCarouselPositionAndClasses();
+    // --- Smooth sliding animation helpers ---
+    let isAnimating = false;
+
+    function getGapInPixels() {
+      let gap = parseFloat(container.css('gap'));
+      return isNaN(gap) ? 0 : gap;
     }
-    
-    function goRight() {
-      current = (current + 1) % cardsData.length;
-      updateCarouselPositionAndClasses();
+
+    function getCardWidth() {
+      const firstCard = container.find('.card').first();
+      return firstCard.length ? firstCard.outerWidth(false) : 0; // width without margin
     }
-    
-    $(leftArrow).off('click').on('click', goLeft);
-    $(rightArrow).off('click').on('click', goRight);
-    
+
+    function getCenteredOffset() {
+      const cards = container.find('.card');
+      if (!cards.length) return 0;
+
+      const cardWidth = getCardWidth();
+      const gap = cards.length <= 1 ? 0 : getGapInPixels();
+      const cardsBlockWidth = (cardWidth * cards.length) + (gap * (cards.length - 1));
+      const carouselViewportWidth = container.parent().width();
+      return (carouselViewportWidth / 2) - (cardsBlockWidth / 2);
+    }
+
+    function slide(direction) {
+      if (isAnimating || cardsData.length <= 1) return;
+      isAnimating = true;
+
+      // 1. Update the logical index first
+      if (direction === 'right') {
+        current = (current + 1) % cardsData.length;
+      } else {
+        current = (current - 1 + cardsData.length) % cardsData.length;
+      }
+
+      // 2. Re-render cards for the new logical state (prev, active, next)
+      renderCards();
+
+      const shift = getCardWidth() + getGapInPixels();
+      const centerOffset = getCenteredOffset();
+
+      // 3. Jump instantly to a start position where the OLD centre card is still centred
+      const startOffset = direction === 'right'
+        ? centerOffset + shift
+        : centerOffset - shift;
+
+      container.css({ transition: 'none', transform: `translateX(${startOffset}px)` });
+
+      // Force reflow so the browser registers the transform without transition
+      void container[0].offsetWidth;
+
+      // 4. Animate to the real centred position for the new state
+      container.css({ transition: 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)', transform: `translateX(${centerOffset}px)` });
+
+      container.one('transitionend', function(e) {
+        if (e.target !== this) return;
+        isAnimating = false;
+      });
+    }
+
+    $(leftArrow).off('click').on('click', function() { slide('left'); });
+    $(rightArrow).off('click').on('click', function() { slide('right'); });
+
     $(document).on('keydown', function(e) {
       if ($(e.target).is('input, textarea, details, summary')) return;
       if(container.is(":visible")){
-        if (e.key === 'ArrowLeft') goLeft();
-        if (e.key === 'ArrowRight') goRight();
+        if (e.key === 'ArrowLeft') slide('left');
+        if (e.key === 'ArrowRight') slide('right');
       }
     });
     
@@ -109,6 +159,7 @@ $(document).ready(function() {
     });
     
     renderCards();
+    updateCarouselPosition();
     carouselsToUpdateOnLoad.push(updateCarouselPosition);
   }
 

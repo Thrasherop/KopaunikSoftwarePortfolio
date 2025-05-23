@@ -56,11 +56,14 @@ $(document).ready(function() {
         if (cardInfo.data.results) details.append(`<p><b>Results:</b> ${cardInfo.data.results}</p>`);
         if (card.hasClass('active') && detailsOpen) {
           details.prop('open', true);
+          card.addClass('expanded');
         }
         // If this is the active card add toggle listener to set global state
         if (card.hasClass('active')) {
           details.on('toggle', function() {
             detailsOpen = this.open;
+            card.toggleClass('expanded', this.open);
+            updateCarouselPosition();
           });
         }
         card.append(details);
@@ -77,20 +80,29 @@ $(document).ready(function() {
       const cards = container.find('.card');
       if (cards.length === 0) return;
 
-      const cardElementWidth = cards.first().outerWidth(false); // Use outerWidth(false) for width without margin
-      let gapInPixels = parseFloat(container.css('gap'));
-      if (isNaN(gapInPixels) || cards.length <= 1) { // No gap if 1 card or gap is not a number
-        gapInPixels = 0;
-      }
-      
-      // Total width of the visible cards block
-      const cardsBlockWidth = (cardElementWidth * cards.length) + (gapInPixels * (cards.length - 1));
-      const carouselViewportWidth = container.parent().width();
-      
-      // Center the block of cards
-      const offset = (carouselViewportWidth / 2) - (cardsBlockWidth / 2);
-
+      const offset = computeActiveCenteredOffset();
       container.css('transform', `translateX(${offset}px)`);
+    }
+
+    function computeActiveCenteredOffset() {
+      const cards = container.find('.card');
+      const activeCard = cards.filter('.active');
+      if (!activeCard.length) return 0;
+
+      const gap = cards.length <= 1 ? 0 : getGapInPixels();
+
+      // Sum widths (plus gaps) of all cards BEFORE the active card
+      let distanceToActiveStart = 0;
+      cards.each(function() {
+        if (this === activeCard[0]) return false; // break
+        distanceToActiveStart += $(this).outerWidth(false) + gap;
+      });
+
+      const activeWidth = activeCard.outerWidth(false);
+      const activeCenterPos = distanceToActiveStart + (activeWidth / 2);
+
+      const carouselViewportWidth = container.parent().width();
+      return (carouselViewportWidth / 2) - activeCenterPos;
     }
     
     // --- Smooth sliding animation helpers ---
@@ -109,14 +121,7 @@ $(document).ready(function() {
     }
 
     function getCenteredOffset() {
-      const cards = container.find('.card');
-      if (!cards.length) return 0;
-
-      const cardWidth = getCardWidth();
-      const gap = cards.length <= 1 ? 0 : getGapInPixels();
-      const cardsBlockWidth = (cardWidth * cards.length) + (gap * (cards.length - 1));
-      const carouselViewportWidth = container.parent().width();
-      return (carouselViewportWidth / 2) - (cardsBlockWidth / 2);
+      return computeActiveCenteredOffset();
     }
 
     function slide(direction) {

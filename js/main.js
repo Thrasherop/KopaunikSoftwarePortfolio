@@ -85,6 +85,8 @@ $(document).ready(function() {
     
     // --- Smooth sliding animation helpers ---
     let isAnimating = false;
+    let fallbackTimer = null;
+    let transitionEndHandler = null;
 
     function getGapInPixels() {
       let gap = parseFloat(container.css('gap'));
@@ -108,11 +110,19 @@ $(document).ready(function() {
     }
 
     function slide(direction) {
-      if (isAnimating || cardsData.length <= 1) return;
+      if (cardsData.length <= 1) return;
+
+      // If an animation is already running, finish it instantly
+      if (isAnimating) {
+        finishCurrentAnimation();
+      }
+
       isAnimating = true;
 
-      // Safety fallback in case transitionend doesn't fire (e.g. zero-distance slide)
-      let fallbackTimer = setTimeout(() => { isAnimating = false; }, 800);
+      // Safety fallback in case transitionend doesn't fire (e.g. user tab switch)
+      fallbackTimer = setTimeout(() => {
+        finishCurrentAnimation();
+      }, 800);
 
       // 1. Update the logical index first
       if (direction === 'right') {
@@ -140,11 +150,25 @@ $(document).ready(function() {
       // 4. Animate to the real centred position for the new state
       container.css({ transition: 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)', transform: `translateX(${centerOffset}px)` });
 
-      container.one('transitionend', function(e) {
+      transitionEndHandler = function(e) {
         if (e.target !== this) return;
+        finishCurrentAnimation();
+      };
+      container.one('transitionend', transitionEndHandler);
+    }
+
+    function finishCurrentAnimation() {
+      if (!isAnimating) return;
+      if (fallbackTimer) {
         clearTimeout(fallbackTimer);
-        isAnimating = false;
-      });
+        fallbackTimer = null;
+      }
+      container.off('transitionend', transitionEndHandler);
+      container.css('transition', 'none');
+      updateCarouselPosition(); // snap to final centered position for current state
+      void container[0].offsetWidth; // reflow
+      container.css('transition', 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)');
+      isAnimating = false;
     }
 
     $(leftArrow).off('click').on('click', function() { slide('left'); });

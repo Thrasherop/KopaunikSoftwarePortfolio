@@ -48,7 +48,7 @@
   "experiments": [
     {
       "title": "Smart Search Beta",
-      "image": "assets/smart_search.png",
+      "image": "assets/smart_search_slimmed.png",
       "hypothesis": "Junior tradespeople can end up making many calls to their leadership. If we provide an AI powered search engine for our vast content library, we can reduce the amount of time senior tradespeople spend on calls, and improve the hands-on learning and confidence of our users.",
       "details": "Collaboration between Innovation, Product, and UX. Spanned over a year, with me as the sole innovation engineer. Multiple UX versions and prototypes, culminating in a private beta.",
       "results": "Led backend, custom agentic logic, and real-time AI API. Onboarded a frontend contractor for final stages. Sole technical lead throughout."

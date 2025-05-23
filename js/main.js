@@ -111,6 +111,9 @@ $(document).ready(function() {
       if (isAnimating || cardsData.length <= 1) return;
       isAnimating = true;
 
+      // Safety fallback in case transitionend doesn't fire (e.g. zero-distance slide)
+      let fallbackTimer = setTimeout(() => { isAnimating = false; }, 800);
+
       // 1. Update the logical index first
       if (direction === 'right') {
         current = (current + 1) % cardsData.length;
@@ -139,6 +142,7 @@ $(document).ready(function() {
 
       container.one('transitionend', function(e) {
         if (e.target !== this) return;
+        clearTimeout(fallbackTimer);
         isAnimating = false;
       });
     }

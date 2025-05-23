@@ -55,7 +55,7 @@
     },
     {
       "title": "Attention Viewer",
-      "image": "assets/attention_viewer.png",
+      "image": "assets/attention_viewer_cropped.png",
       "hypothesis": "If we can view the values of the attention mechanisms within a transformer, we can debug prompts and create better ones.",
       "details": "Started with BertViz but switched to Hugging Face Transformers to visualize attention for SoTA models (using masked attention). Built visualizations for attention at layer/head/token level.",
       "results": "Proved educational but limited in practical use due to hardware and abstraction."
@@ -69,7 +69,7 @@
     },
     {
       "title": "Context Pre-Stuffing",
-      "image": "assets/context_graph.png",
+      "image": "assets/cps.png",
       "hypothesis": "If we stuff the context with only factual answers, we can increase model accuracy and reduce hallucinations.",
       "details": "Used open QA benchmarks and compared GPT-3.5 Turbo responses with/without pre-stuffed factual context. Graded correctness using LLM evaluation.",
       "results": "Slight accuracy gain but much higher hallucination rate—fixed by including 'I don’t know' answers in context, which normalized results. Statistical significance was achieved (p < 0.005)."

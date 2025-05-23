@@ -17,14 +17,14 @@
         "responsibilities": "I implemented the wireframe and built the deployment and testing logic. Additionally, I also taught a lesson to non-technical staff on what embeddings were, how they worked, and to suggest best practices for them going forward."
       },
       {
-        "title": "Charles, the ama bot",
+        "title": "Charles, the A.M.A. bot",
         "image": "assets/charlesv2.png",
         "purpose": "The company is large enough that knowledge is scattered across the entire organization. As such, there was an internal process for asking the whole company a question, particularly used by sales-people and the customer success team to help clients. There was an internal bot that would make a first attempt at answering the question based on previous answers and documentation.",
         "details": "Charles was already built when I joined Interplay Learning. However, its performance was unideal and needed improvement. I was tasked with improving Charles RAG as well as its general performance. In the end, I split the RAG into several steps which ultimately resulted in much higher quality results. One of the major issues that I found was that many questions actually had several questions, which resulted in diluted and vague query embeddings. One of the major improvements came by having an LLM first split the query into an array of individual questions, then running a dedicated retrieval on each of those questions, and only then passed that data to an answering LLM. This enabled that final LLM to have documents more closely related to the questions being asked.",
         "responsibilities": "Researched and implemented multi-step retrieval and answering flow. Improved overall bot performance."
       },
       {
-        "title": "Jira streamlining",
+        "title": "Jira Streamlining",
         "image": "assets/jira_image.png",
         "purpose": "The company wants Agentic capabilities to track and manage development. We use Jira internally, so I was tasked with creating agentic systems to manage this.",
         "details": "This started by translating existing Jira integration code into something the AgentsSDK could utilize. When I was nearing finishing that Jira Agent, I was instructed to pivot the Jira integration into an MCP server.",

@@ -11,6 +11,7 @@ $(document).ready(function() {
   function renderCarousel(cardsData, containerSelector, leftArrow, rightArrow) {
     let current = 0;
     const container = $(containerSelector);
+    let initialLoad = true;
     
     function renderCards() {
       container.empty();
@@ -53,6 +54,9 @@ $(document).ready(function() {
         if (cardInfo.data.details) details.append(`<p>${cardInfo.data.details}</p>`);
         if (cardInfo.data.responsibilities) details.append(`<p><b>Responsibilities:</b> ${cardInfo.data.responsibilities}</p>`);
         if (cardInfo.data.results) details.append(`<p><b>Results:</b> ${cardInfo.data.results}</p>`);
+        if (card.hasClass('active') && !initialLoad) {
+          details.prop('open', true);
+        }
         card.append(details);
         container.append(card);
       });
@@ -110,6 +114,7 @@ $(document).ready(function() {
     }
 
     function slide(direction) {
+      initialLoad = false;
       if (cardsData.length <= 1) return;
 
       // If an animation is already running, finish it instantly

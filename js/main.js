@@ -63,7 +63,21 @@ $(document).ready(function() {
           details.on('toggle', function() {
             detailsOpen = this.open;
             card.toggleClass('expanded', this.open);
+            
+            // Re-center immediately (before transition) and once more after the
+            // expansion/collapse animation completes to capture the new width.
             updateCarouselPosition();
+
+            // Listen for the end of the card's size/transform transition, then
+            // recenter and remove the listener. Namespace keeps things tidy.
+            card.off('transitionend.details').on('transitionend.details', function(e) {
+              // Ensure we react only to width/transform related transitions on this card
+              const prop = (e.originalEvent || e).propertyName;
+              if (prop === 'width' || prop === 'min-width' || prop === 'max-width' || prop === 'transform') {
+                updateCarouselPosition();
+                card.off('transitionend.details');
+              }
+            });
           });
         }
         card.append(details);
@@ -206,11 +220,45 @@ $(document).ready(function() {
     carouselsToUpdateOnLoad.push(updateCarouselPosition);
   }
 
+  // -- Replace manual carousel logic with Slick-based init --
+  function initSlickCarousel(cardsData, containerSelector, leftArrow, rightArrow) {
+    const container = $(containerSelector);
+    container.empty();
+    cardsData.forEach(data => {
+      let card = $('<div class="card"></div>');
+      card.append(`<img src="${data.image}" alt="${data.title}">`);
+      card.append(`<h3>${data.title}</h3>`);
+      if (data.purpose) card.append(`<p>${data.purpose}</p>`);
+      if (data.hypothesis) card.append(`<p><b>Hypothesis:</b> ${data.hypothesis}</p>`);
+      let details = $('<details></details>');
+      const summaryText = data.responsibilities ? 'Details & Responsibilities' : 'Details & Results';
+      details.append(`<summary>${summaryText}</summary>`);
+      if (data.details) details.append(`<p>${data.details}</p>`);
+      if (data.responsibilities) details.append(`<p><b>Responsibilities:</b> ${data.responsibilities}</p>`);
+      if (data.results) details.append(`<p><b>Results:</b> ${data.results}</p>`);
+      card.append(details);
+      container.append(card);
+    });
+    container.slick({
+      centerMode: true,
+      slidesToShow: 3,
+      variableWidth: true,
+      infinite: true,
+      prevArrow: $(leftArrow),
+      nextArrow: $(rightArrow),
+      responsive: [
+        { breakpoint: 1000, settings: { slidesToShow: 1, centerMode: true, variableWidth: true } },
+        { breakpoint: 600, settings: { slidesToShow: 1, centerMode: true, variableWidth: true } }
+      ]
+    });
+    container.find('details').on('toggle', () => container.slick('setPosition'));
+  }
+
   $.getJSON('data/all_data.json', function(data) {
     $('#intro p').html(data.intro);
     $('#recommendation blockquote').html(data.recommendation.replace(/\n/g, '<br><br>'));
-    renderCarousel(data.projects, '#projects-scroll', '#projects-left', '#projects-right');
-    renderCarousel(data.experiments, '#experiments-scroll', '#experiments-left', '#experiments-right');
+    initSlickCarousel(data.projects, '#projects-scroll', '#projects-left', '#projects-right');
+    initSlickCarousel(data.experiments, '#experiments-scroll', '#experiments-left', '#experiments-right');
     
     if (document.readyState === 'complete') {
       carouselsToUpdateOnLoad.forEach(fn => fn());
@@ -220,10 +268,10 @@ $(document).ready(function() {
   }).fail(function() {
     console.error('Failed to load data. Trying fallback...');
     $.getJSON('data/projects.json', function(projects) {
-      renderCarousel(projects, '#projects-scroll', '#projects-left', '#projects-right');
+      initSlickCarousel(projects, '#projects-scroll', '#projects-left', '#projects-right');
     });
     $.getJSON('data/experiments.json', function(experiments) {
-      renderCarousel(experiments, '#experiments-scroll', '#experiments-left', '#experiments-right');
+      initSlickCarousel(experiments, '#experiments-scroll', '#experiments-left', '#experiments-right');
     });
   });
   

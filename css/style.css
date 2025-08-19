@@ -121,141 +121,70 @@ h3 {
   overflow: visible;
 }
 
-.scroll-container {
-  display: flex;
-  overflow: visible;
-  gap: 3rem;
-  width: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
 .card {
-  min-width: 380px;
-  max-width: 400px;
-  min-height: 360px;
+  /* Let Slick control width, but constrain content */
+  min-height: 400px;
+  max-width: 350px;
+  min-width: 300px;
   background: rgba(255, 255, 255, 0.85);
   border-radius: 24px;
-  box-shadow: 
+  box-shadow:
     0 20px 60px rgba(0,0,0,0.15),
     0 8px 25px rgba(0,0,0,0.1),
     inset 0 1px 0 rgba(255,255,255,0.8);
   border: 2px solid rgba(255,255,255,0.4);
-  padding: 2rem;
+  padding: 1.5rem;
   backdrop-filter: blur(20px) saturate(1.4);
   transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-  opacity: 0.6;
-  transform: scale(0.85) rotateY(25deg);
-  z-index: 1;
-  pointer-events: none;
   color: #2d3748;
   position: relative;
   overflow: hidden;
 }
 
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
-  animation: shimmer 3s ease-in-out infinite;
+/* Slick-specific styling - work with the library */
+.slick-slide .card {
+  opacity: 0.6;
+  transform: scale(0.85) rotateY(25deg);
+  pointer-events: none;
+  z-index: 1;
 }
 
-@keyframes shimmer {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
+.slick-active .card {
+  opacity: 0.8;
+  transform: scale(0.9) rotateY(-10deg);
+  pointer-events: none;
+  z-index: 2;
 }
 
-.card.active {
+.slick-center .card {
   opacity: 1;
-  transform: scale(1.2) rotateY(0deg);
-  z-index: 3;
+  transform: scale(1.1) rotateY(0deg);
   pointer-events: auto;
-  box-shadow: 
+  box-shadow:
     0 25px 80px rgba(0,0,0,0.25),
     0 15px 35px rgba(0,0,0,0.15),
     inset 0 1px 0 rgba(255,255,255,0.9);
   border: 2px solid rgba(255,255,255,0.6);
+  z-index: 3;
 }
 
-.card.side {
-  opacity: 0.8;
-  transform: scale(0.9) rotateY(-10deg);
-  z-index: 2;
+.slick-center .card.expanded {
+  max-width: 420px;
+  transition: max-width 0.4s ease;
 }
 
-.card.side.left {
-  transform: scale(0.9) rotateY(15deg);
-}
-
-.card:hover.active {
-  /* Shift downward slightly and keep the same scale so it doesn't cover the section header */
-  transform: scale(1.3) rotateY(0deg) translateY(5px);
-}
-
+/* Consistent image sizing within the constrained cards */
 .card img {
-  width: 100%; 
-  height: 200px; 
-  object-fit: cover; 
-  border-radius: 16px; 
-  margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-  transition: transform 0.3s ease;
-}
-
-.card.active img {
-  transform: scale(1.02);
-}
-
-details { 
-  margin-top: 1rem;
-  cursor: pointer;
-}
-
-details summary {
-  font-weight: 600;
-  padding: 0.5rem 0;
-  color: #4a5568;
-  transition: color 0.2s ease;
-}
-
-details summary:hover {
-  color: #2d3748;
-}
-
-details[open] summary {
-  margin-bottom: 0.5rem;
-}
-
-blockquote {
-  background: rgba(255,255,255,0.7);
-  border-left: 6px solid #4ecdc4;
-  padding: 2rem 2.5rem;
-  margin: 2rem auto;
-  font-style: italic;
-  color: #2d3748;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  font-size: 1.1rem;
-  line-height: 1.8;
-  max-width: 900px;
-  position: relative;
-  backdrop-filter: blur(10px);
-}
-
-blockquote::before {
-  content: '"';
-  font-size: 4rem;
-  color: #4ecdc4;
-  position: absolute;
-  top: -10px;
-  left: 20px;
-  opacity: 0.3;
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  margin: 0 auto 1.5rem auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  background: rgba(248, 250, 252, 0.9);
+  border: 1px solid rgba(255,255,255,0.5);
 }
 
 .carousel-arrow {
@@ -341,7 +270,10 @@ blockquote::before {
 
 @media (max-width: 1000px) {
   .carousel-wrapper { max-width: 95vw; }
-  .card { min-width: 85vw; max-width: 90vw; }
+  .card {
+    max-width: 90vw;
+    min-width: 280px;
+  }
   .carousel-arrow.left { left: 10px; }
   .carousel-arrow.right { right: 10px; }
   h1 { font-size: 2.5rem; }
@@ -351,23 +283,111 @@ blockquote::before {
 @media (max-width: 600px) {
   h1 { font-size: 2rem; }
   h2 { font-size: 1.4rem; }
-  .card { 
-    min-width: 95vw; 
-    max-width: 98vw; 
-    padding: 1.5rem; 
-    transform: scale(0.9);
-  }
-  .card.active {
-    transform: scale(1);
+  .card {
+    max-width: 95vw;
+    min-width: 250px;
+    padding: 1.2rem;
   }
   .carousel-wrapper { padding: 1rem 0 2rem 0; }
   #intro p { font-size: 1rem; }
   blockquote { padding: 1.5rem; }
 }
 
-/* Wider layout for the centred card when its <details> is expanded */
-.card.active.expanded {
-  min-width: 500px;
-  max-width: 520px;
-  transition: all 0.4s ease;
+details { 
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+details summary {
+  font-weight: 600;
+  padding: 0.5rem 0;
+  color: #4a5568;
+  transition: color 0.2s ease;
+}
+
+details summary:hover {
+  color: #2d3748;
+}
+
+details[open] summary {
+  margin-bottom: 0.5rem;
+}
+
+blockquote {
+  background: rgba(255,255,255,0.7);
+  border-left: 6px solid #4ecdc4;
+  padding: 2rem 2.5rem;
+  margin: 2rem auto;
+  font-style: italic;
+  color: #2d3748;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  max-width: 900px;
+  position: relative;
+  backdrop-filter: blur(10px);
+}
+
+blockquote::before {
+  content: '"';
+  font-size: 4rem;
+  color: #4ecdc4;
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  opacity: 0.3;
+}
+
+/* Removed old aggressive image styling that fought with Slick */
+
+/* Essential Slick carousel styling */
+.slick-list {
+  overflow: visible;
+}
+
+.slick-track {
+  display: flex;
+  align-items: center;
+}
+
+.slick-slide {
+  margin: 0 1.5rem;
+  outline: none;
+}
+
+/* Handle the card-image wrapper that JavaScript creates */
+.card .card-image {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 12px;
+  background: rgba(248, 250, 252, 0.9);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.5);
+}
+
+.card .card-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Also handle direct img tags (fallback) */
+.card img:not(.card-image img) {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  margin: 0 auto 1.5rem auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  background: rgba(248, 250, 252, 0.9);
+  border: 1px solid rgba(255,255,255,0.5);
 }

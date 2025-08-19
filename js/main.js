@@ -226,7 +226,7 @@ $(document).ready(function() {
     container.empty();
     cardsData.forEach(data => {
       let card = $('<div class="card"></div>');
-      card.append(`<img src="${data.image}" alt="${data.title}">`);
+      card.append(`<div class="card-image"><img src="${data.image}" alt="${data.title}"></div>`);
       card.append(`<h3>${data.title}</h3>`);
       if (data.purpose) card.append(`<p>${data.purpose}</p>`);
       if (data.hypothesis) card.append(`<p><b>Hypothesis:</b> ${data.hypothesis}</p>`);

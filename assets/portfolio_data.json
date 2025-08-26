@@ -1,0 +1,82 @@
+{
+  "order": ["experiments", "projects", "recommendation"],
+  "intro": "Thanks for taking a look at my portfolio! Many of these projects are from my last job, so I’m limited to how much detail I can provide. Nonetheless, this portfolio shows the projects that I’m most proud of, and that showed my best skills. Enjoy! -Joshua Kopaunik",
+  "recommendation": "Joshua is a talented and dedicated engineer with a real passion for pushing technological boundaries, particularly in the realm of AI and machine learning. He consistently impressed me with his strong technical abilities in AI/ML, staying current with the latest advancements and effectively sharing his learnings with the team. Joshua is a good and careful coder, consistently producing well-structured, thoroughly documented, and thoughtfully designed code.\n\nDuring his tenure, Joshua made significant contributions to several key projects. He was instrumental in the development of our AI Smart Search customer-facing tool, where he designed and implemented core backend functionalities, integrated AI commands, and set up the datastore. Additionally, Joshua created an internal tool for our content team to be able to populate our AI bots with internal knowledge, including handling how that information would be chunked, vectorized, and retrieved. He implemented a robust testing system for it. Joshua was always on the cutting-edge of RAG research, and how best to effectively retrieve and rank embeddings. Joshua also demonstrated strong collaborative skills, working effectively with frontend developers and other team members to bring these projects to fruition.\n\nJoshua is a quick learner, readily adapting to new technologies and frameworks, such as Google Cloud Platform and various AI models, and applying this knowledge to improve project implementations. He consistently embraced daily challenges and contributed to spirited, productive discourse within our team.\n\nJoshua leaves behind a legacy of strong technical contributions and a forward-thinking approach. He would be a significant asset to any organization seeking a software engineer with robust AI/ML skills, a commitment to quality, and a collaborative spirit. I highly recommend Joshua.\n\nRogan Griffin | Chief Innovation Officer\nEmail: rgriffin@interplaylearning.com\nPhone: (650) 646 - 2084",
+  "projects": [
+    {
+      "title": "SAM",
+      "image": "assets/sam_il_announcement.png",
+      "purpose": "SAM was already an existing product when I joined IL. However, one of my first projects was to improve SAM’s personality, usefulness, and reliability.",
+      "details": "This improvement came in two parts. The first part was prompt engineering—giving SAM better context of the app it was built in, which dramatically improved its usefulness and relevance. The second was API parameter tuning, specifically reducing the temperature for more predictable and consistent results.",
+      "responsibilities": "Led improvements, handled both prompt and parameter engineering."
+    },
+    {
+      "title": "Embeddings Editor",
+      "image": "assets/EE_E.png",
+      "purpose": "Our award-winning SAM system started basic. The content team wanted a tool to create custom embeddings based on our existing content to improve retrieval performance and grounding quality for future systems.",
+      "details": "Built an internal web-app for creating namespaces/documents and testing new embeddings. Managed deployment and provided an interface for verifying retrieval accuracy.",
+      "responsibilities": "Implemented UI and deployment logic. Taught non-technical staff about embeddings and RAG optimization."
+    },
+    {
+      "title": "Charles, the AMA Bot",
+      "image": "assets/charlesv2.png",
+      "purpose": "The company had a process for fielding questions from the entire organization, mainly for sales and customer success. Charles attempted to answer based on previous knowledge and documentation.",
+      "details": "Charles existed before my arrival but needed improvement. I split RAG into multiple steps for quality. One key fix: an LLM would first split the incoming question into subquestions, run retrieval per subquestion, then pass all retrieved documents to an answer LLM—dramatically improving answer relevance.",
+      "responsibilities": "Researched and implemented multi-step retrieval and answering flow. Improved overall bot performance."
+    },
+    {
+      "title": "Jira Streamlining",
+      "image": "assets/jira_image.png",
+      "purpose": "Automate and agentify internal development management using Jira.",
+      "details": "Started by translating existing Jira integration into something usable by the AgentsSDK. Midway, pivoted to MCP server development, focusing on ease of deployment and scalability.",
+      "responsibilities": "Developed Agent and MCP server, and authored standards and documentation for future MCP deployments."
+    },
+    {
+      "title": "Embedding Model Migration",
+      "image": "assets/openai_logo.png",
+      "purpose": "In January 2024, OpenAI released new embedding models. I migrated Interplay's internal RAG stack to the new system.",
+      "details": "Created a new Pinecone index with the appropriate dimensions, engineered new embedding text generation, and recursively scraped and embedded our own content. Built a codebase for flexible embedding workflows.",
+      "responsibilities": "Experimented, led the migration, and engineered core embedding infrastructure."
+    },
+    {
+      "title": "Quiz Generator",
+      "image": "assets/quiz_generator.png",
+      "purpose": "Enable account admins to create quizzes—manually or with AI assistance—tailored to their learners.",
+      "details": "Developed a web-app to load/edit quizzes and integrate an AI chat interface for quiz creation or rewriting. Admins could select lessons/courses, manually edit, or direct AI to make changes.",
+      "responsibilities": "Took over a v0.1 prototype and implemented the Generative AI feature and major improvements."
+    }
+  ],
+  "experiments": [
+    {
+      "title": "Smart Search Beta",
+      "image": "assets/smart_search_slimmed.png",
+      "image_normalization_method": "normalize_to_width",
+      "hypothesis": "Junior tradespeople can end up making many calls to their leadership. If we provide an AI powered search engine for our vast content library, we can reduce the amount of time senior tradespeople spend on calls, and improve the hands-on learning and confidence of our users.",
+      "details": "Collaboration between Innovation, Product, and UX. Spanned over a year, with me as the sole innovation engineer. Multiple UX versions and prototypes, culminating in a private beta.",
+      "results": "Led backend, custom agentic logic, and real-time AI API. Onboarded a frontend contractor for final stages. Sole technical lead throughout."
+    },
+    {
+      "title": "Attention Viewer",
+      "image": "assets/attention_viewer_cropped.png",
+      "hypothesis": "If we can view the values of the attention mechanisms within a transformer, we can debug prompts and create better ones.",
+      "details": "Started with BertViz but switched to Hugging Face Transformers to visualize attention for SoTA models (using masked attention). Built visualizations for attention at layer/head/token level.",
+      "results": "Proved educational but limited in practical use due to hardware and abstraction."
+    },
+    {
+      "title": "Advanced RAG",
+      "image": "assets/sage_paper.png",
+      "image_normalization_method": "enforce_aspect_ratio",
+      "hypothesis": "Upgrading from simple nearest-k retrieval could boost result quality in RAG.",
+      "details": "Explored ensemble RAG, Cohere reranking, different embedding models, and various quick prototype implementations.",
+      "results": "Had promising insights, but full exploration was cut short when the department was dissolved."
+    },
+    {
+      "title": "Context Pre-Stuffing",
+      "image": "assets/cps.png",
+      "image_normalization_method": "normalize_to_width",
+      "hypothesis": "If we stuff the context with only factual answers, we can increase model accuracy and reduce hallucinations.",
+      "details": "Used open QA benchmarks and compared GPT-3.5 Turbo responses with/without pre-stuffed factual context. Graded correctness using LLM evaluation.",
+      "results": "Slight accuracy gain but much higher hallucination rate—fixed by including 'I don’t know' answers in context, which normalized results. Statistical significance was achieved (p < 0.005)."
+    }
+  ]
+}

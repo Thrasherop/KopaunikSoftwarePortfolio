@@ -110,6 +110,7 @@ class _PortfolioCardState extends State<PortfolioCard> {
           return tp.size.height;
         }
 
+
         final TextStyle? titleStyle = theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700);
         final TextStyle? sectionTitleStyle = theme.textTheme.labelLarge?.copyWith(
           color: Colors.blue[200],
@@ -229,16 +230,23 @@ class _PortfolioCardState extends State<PortfolioCard> {
         // Panel current height based on expansion state
         final double panelHeight = widget.isExpanded ? expandedPanelHeight : bandHeight;
 
-        // Content viewport height (space for content area inside the panel, excluding button)
-        final double contentViewportHeight = panelHeight - (PortfolioCard._panelPadding * 2) - (needsTruncate ? (PortfolioCard._buttonHeight + PortfolioCard._buttonSpacing) : 0);
+        // Content viewport height (space for scrollable sections only),
+        // subtract header and spacing so the Column never overflows.
+        double contentViewportHeight = panelHeight
+            - (PortfolioCard._panelPadding * 2)
+            - headerHeight
+            - 10; // let text use full width/height; button overlays and does not reserve space
+        if (contentViewportHeight < 0) contentViewportHeight = 0;
 
+        // Calculate right padding so text never sits under the bottom-right button
         final Widget panel = AnimatedContainer(
           duration: const Duration(milliseconds: 220),
           curve: Curves.easeInOut,
           height: panelHeight,
           padding: const EdgeInsets.all(PortfolioCard._panelPadding),
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(widget.isExpanded ? 0.55 : 0.18),
+            // Fully opaque to clearly separate text from the image
+            color: Colors.black,
             borderRadius: BorderRadius.circular(14.0),
             border: Border.all(color: Colors.white.withOpacity(0.06)),
           ),
@@ -291,13 +299,13 @@ class _PortfolioCardState extends State<PortfolioCard> {
               ),
               if (needsTruncate)
                 Positioned(
-                  left: 0,
+                  right: 0,
                   bottom: 0,
                   child: TextButton(
                     onPressed: widget.onToggleExpand,
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.white,
-                      backgroundColor: theme.colorScheme.primary.withOpacity(0.2),
+                      backgroundColor: theme.colorScheme.primary, // fully opaque
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     ),
                     child: Text(widget.isExpanded ? 'See less' : 'See more…'),

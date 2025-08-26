@@ -6,6 +6,7 @@
     {
       "title": "SAM",
       "image": "assets/sam_il_announcement.png",
+      "image_normalization_method": "normalize_to_width",
       "purpose": "SAM was already an existing product when I joined IL. However, one of my first projects was to improve SAM’s personality, usefulness, and reliability.",
       "details": "This improvement came in two parts. The first part was prompt engineering—giving SAM better context of the app it was built in, which dramatically improved its usefulness and relevance. The second was API parameter tuning, specifically reducing the temperature for more predictable and consistent results.",
       "responsibilities": "Led improvements, handled both prompt and parameter engineering."
@@ -13,6 +14,7 @@
     {
       "title": "Embeddings Editor",
       "image": "assets/EE_E.png",
+      "image_normalization_method": "normalize_to_width",
       "purpose": "Our award-winning SAM system started basic. The content team wanted a tool to create custom embeddings based on our existing content to improve retrieval performance and grounding quality for future systems.",
       "details": "Built an internal web-app for creating namespaces/documents and testing new embeddings. Managed deployment and provided an interface for verifying retrieval accuracy.",
       "responsibilities": "Implemented UI and deployment logic. Taught non-technical staff about embeddings and RAG optimization."
@@ -20,6 +22,7 @@
     {
       "title": "Charles, the AMA Bot",
       "image": "assets/charlesv2.png",
+      "image_normalization_method": "normalize_to_width",
       "purpose": "The company had a process for fielding questions from the entire organization, mainly for sales and customer success. Charles attempted to answer based on previous knowledge and documentation.",
       "details": "Charles existed before my arrival but needed improvement. I split RAG into multiple steps for quality. One key fix: an LLM would first split the incoming question into subquestions, run retrieval per subquestion, then pass all retrieved documents to an answer LLM—dramatically improving answer relevance.",
       "responsibilities": "Researched and implemented multi-step retrieval and answering flow. Improved overall bot performance."
@@ -27,6 +30,7 @@
     {
       "title": "Jira Streamlining",
       "image": "assets/jira_image.png",
+      "image_normalization_method": "normalize_to_width",
       "purpose": "Automate and agentify internal development management using Jira.",
       "details": "Started by translating existing Jira integration into something usable by the AgentsSDK. Midway, pivoted to MCP server development, focusing on ease of deployment and scalability.",
       "responsibilities": "Developed Agent and MCP server, and authored standards and documentation for future MCP deployments."
@@ -34,6 +38,7 @@
     {
       "title": "Embedding Model Migration",
       "image": "assets/openai_logo.png",
+      "image_normalization_method": "normalize_to_width",
       "purpose": "In January 2024, OpenAI released new embedding models. I migrated Interplay's internal RAG stack to the new system.",
       "details": "Created a new Pinecone index with the appropriate dimensions, engineered new embedding text generation, and recursively scraped and embedded our own content. Built a codebase for flexible embedding workflows.",
       "responsibilities": "Experimented, led the migration, and engineered core embedding infrastructure."
@@ -41,6 +46,7 @@
     {
       "title": "Quiz Generator",
       "image": "assets/quiz_generator.png",
+      "image_normalization_method": "normalize_to_width",
       "purpose": "Enable account admins to create quizzes—manually or with AI assistance—tailored to their learners.",
       "details": "Developed a web-app to load/edit quizzes and integrate an AI chat interface for quiz creation or rewriting. Admins could select lessons/courses, manually edit, or direct AI to make changes.",
       "responsibilities": "Took over a v0.1 prototype and implemented the Generative AI feature and major improvements."
@@ -58,6 +64,7 @@
     {
       "title": "Attention Viewer",
       "image": "assets/attention_viewer_cropped.png",
+      "image_normalization_method": "normalize_to_width",
       "hypothesis": "If we can view the values of the attention mechanisms within a transformer, we can debug prompts and create better ones.",
       "details": "Started with BertViz but switched to Hugging Face Transformers to visualize attention for SoTA models (using masked attention). Built visualizations for attention at layer/head/token level.",
       "results": "Proved educational but limited in practical use due to hardware and abstraction."

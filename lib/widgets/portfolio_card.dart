@@ -292,11 +292,18 @@ class _PortfolioCardState extends State<PortfolioCard> {
                           height: animatedContentViewportHeight,
                           child: Stack(
                             children: [
-                              SingleChildScrollView(
-                                physics: widget.isExpanded ? const BouncingScrollPhysics() : const NeverScrollableScrollPhysics(),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: sectionWidgets,
+                              // Disable automatic scrollbars so nothing appears on hover
+                              // when the panel is collapsed (and keep it off when expanded).
+                              ScrollConfiguration(
+                                behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                                child: SingleChildScrollView(
+                                  physics: widget.isExpanded
+                                      ? const BouncingScrollPhysics()
+                                      : const NeverScrollableScrollPhysics(),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: sectionWidgets,
+                                  ),
                                 ),
                               ),
                               if (!widget.isExpanded && needsTruncate)

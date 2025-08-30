@@ -19,8 +19,8 @@ class MyApp extends StatelessWidget {
     final baseTheme = ThemeData(
       brightness: Brightness.dark,
       colorScheme: const ColorScheme.dark(
-        primary: Color(0xFF7C8CF8),
-        secondary: Color(0xFF70E1F5),
+        primary: Color(0xFF7C8CF8), // lavender-blue accent
+        secondary: Color(0xFF7C8CF8), // unify accent with primary for cohesion
         surface: Color(0xFF121212),
       ),
       scaffoldBackgroundColor: const Color(0xFF0F1115),

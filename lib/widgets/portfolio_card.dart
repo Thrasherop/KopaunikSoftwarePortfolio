@@ -113,7 +113,7 @@ class _PortfolioCardState extends State<PortfolioCard> {
 
         final TextStyle? titleStyle = theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700);
         final TextStyle? sectionTitleStyle = theme.textTheme.labelLarge?.copyWith(
-          color: Colors.blue[200],
+          color: theme.colorScheme.primary.withOpacity(0.85),
           fontWeight: FontWeight.w600,
         );
         final TextStyle? bodyStyle = theme.textTheme.bodyMedium?.copyWith(
@@ -239,80 +239,93 @@ class _PortfolioCardState extends State<PortfolioCard> {
         if (contentViewportHeight < 0) contentViewportHeight = 0;
 
         // Calculate right padding so text never sits under the bottom-right button
-        final Widget panel = AnimatedContainer(
+        // Use TweenAnimationBuilder so inner content sizes with the actual animated height,
+        // avoiding a brief overflow while the panel grows/shrinks.
+        final Widget panel = TweenAnimationBuilder<double>(
           duration: const Duration(milliseconds: 220),
           curve: Curves.easeInOut,
-          height: panelHeight,
-          padding: const EdgeInsets.all(PortfolioCard._panelPadding),
-          decoration: BoxDecoration(
-            // Fully opaque to clearly separate text from the image
-            color: Colors.black,
-            borderRadius: BorderRadius.circular(14.0),
-            border: Border.all(color: Colors.white.withOpacity(0.06)),
-          ),
-          child: Stack(
-            children: [
-              // Scrollable content area; scroll only when expanded beyond available height
-              Positioned.fill(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    headerRow,
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: contentViewportHeight,
-                      child: Stack(
-                        children: [
-                          SingleChildScrollView(
-                            physics: widget.isExpanded ? const BouncingScrollPhysics() : const NeverScrollableScrollPhysics(),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: sectionWidgets,
-                            ),
-                          ),
-                          if (!widget.isExpanded && needsTruncate)
-                            Positioned(
-                              left: 0,
-                              right: 0,
-                              bottom: 0,
-                              height: 40,
-                              child: IgnorePointer(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        Colors.black.withOpacity(0.0),
-                                        Colors.black.withOpacity(0.35),
-                                      ],
+          tween: Tween<double>(begin: bandHeight, end: panelHeight),
+          builder: (context, animatedHeight, _) {
+            double animatedContentViewportHeight = animatedHeight
+                - (PortfolioCard._panelPadding * 2)
+                - headerHeight
+                - 10; // keep spacing consistent with static calc above
+            if (animatedContentViewportHeight < 0) animatedContentViewportHeight = 0;
+
+            return Container(
+              height: animatedHeight,
+              padding: const EdgeInsets.all(PortfolioCard._panelPadding),
+              decoration: BoxDecoration(
+                // Fully opaque to clearly separate text from the image
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(14.0),
+                border: Border.all(color: Colors.white.withOpacity(0.06)),
+              ),
+              child: Stack(
+                children: [
+                  // Scrollable content area; scroll only when expanded beyond available height
+                  Positioned.fill(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        headerRow,
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          height: animatedContentViewportHeight,
+                          child: Stack(
+                            children: [
+                              SingleChildScrollView(
+                                physics: widget.isExpanded ? const BouncingScrollPhysics() : const NeverScrollableScrollPhysics(),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: sectionWidgets,
+                                ),
+                              ),
+                              if (!widget.isExpanded && needsTruncate)
+                                Positioned(
+                                  left: 0,
+                                  right: 0,
+                                  bottom: 0,
+                                  height: 40,
+                                  child: IgnorePointer(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Colors.black.withOpacity(0.0),
+                                            Colors.black.withOpacity(0.35),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
-                        ],
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (needsTruncate)
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: TextButton(
+                        onPressed: widget.onToggleExpand,
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: theme.colorScheme.primary, // fully opaque
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        ),
+                        child: Text(widget.isExpanded ? 'See less' : 'See more…'),
                       ),
                     ),
-                  ],
-                ),
+                ],
               ),
-              if (needsTruncate)
-                Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: TextButton(
-                    onPressed: widget.onToggleExpand,
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: theme.colorScheme.primary, // fully opaque
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    ),
-                    child: Text(widget.isExpanded ? 'See less' : 'See more…'),
-                  ),
-                ),
-            ],
-          ),
+            );
+          },
         );
 
         return Container(

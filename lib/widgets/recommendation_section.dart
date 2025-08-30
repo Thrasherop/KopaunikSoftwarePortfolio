@@ -4,6 +4,7 @@ class RecommendationSection extends StatelessWidget {
   final String text;
   const RecommendationSection({super.key, required this.text});
 
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -29,20 +30,21 @@ class RecommendationSection extends StatelessWidget {
               constraints: const BoxConstraints(maxWidth: 900),
               padding: const EdgeInsets.all(24.0),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: const Color(0xFF1A1E27),
                 borderRadius: BorderRadius.circular(12.0),
+                border: Border.all(color: Colors.white.withOpacity(0.06)),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.18),
-                    blurRadius: 30,
-                    offset: const Offset(0, 16),
+                    color: Colors.black.withOpacity(0.25),
+                    blurRadius: 24,
+                    offset: const Offset(0, 14),
                   ),
                 ],
               ),
               child: Text(
                 text,
                 style: theme.textTheme.bodyLarge?.copyWith(
-                  color: const Color(0xFF2D2D2D),
+                  color: Colors.white.withOpacity(0.92),
                   height: 1.5,
                 ),
               ),

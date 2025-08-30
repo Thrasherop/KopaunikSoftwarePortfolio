@@ -13,8 +13,8 @@ class HeroHeader extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Color(0xFF6A75E6),
-            Color(0xFF70E1F5),
+            Color(0xFF0F1115), // deep slate
+            Color(0xFF1A1E27), // slightly lighter slate
           ],
         ),
       ),

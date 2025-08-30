@@ -141,6 +141,9 @@ class _MyHomePageState extends State<MyHomePage> {
           final List<dynamic> order =
               (rawSnapshot.data?['order'] as List<dynamic>? ??
                   ['experiments', 'projects', 'recommendation']);
+          final bool edgeFade = ((rawSnapshot.data?['page-config'] as Map<dynamic, dynamic>?)?
+                      ['fade-out-cards'] as bool?) ??
+              true;
 
           return FutureBuilder<List<PortfolioItem>>(
             future: _portfolioItems,
@@ -167,7 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         SliverToBoxAdapter(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 24.0),
-                            child: PortfolioCarousel(title: 'Projects', items: projects),
+                            child: PortfolioCarousel(title: 'Projects', items: projects, edgeFade: edgeFade),
                           ),
                         ),
                       );
@@ -177,7 +180,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         SliverToBoxAdapter(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 24.0),
-                            child: PortfolioCarousel(title: 'Experiments', items: experiments),
+                            child: PortfolioCarousel(title: 'Experiments', items: experiments, edgeFade: edgeFade),
                           ),
                         ),
                       );

@@ -5,11 +5,13 @@ import 'package:portfolio_pair_programmed/widgets/portfolio_card.dart';
 class PortfolioCarousel extends StatefulWidget {
   final String title;
   final List<PortfolioItem> items;
+  final bool edgeFade;
 
   const PortfolioCarousel({
     super.key,
     required this.title,
     required this.items,
+    this.edgeFade = true,
   });
 
   @override
@@ -103,6 +105,46 @@ class _PortfolioCarouselState extends State<PortfolioCarousel> {
                           ),
                         ),
                       ),
+                      // Gentle fade at the left/right edges of the carousel viewport
+                      if (widget.edgeFade)
+                        Positioned.fill(
+                          child: IgnorePointer(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: horizontalPad),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 72,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                        colors: [
+                                          Theme.of(context).scaffoldBackgroundColor,
+                                          Theme.of(context).scaffoldBackgroundColor.withOpacity(0.0),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const Expanded(child: SizedBox.shrink()),
+                                  Container(
+                                    width: 72,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.centerRight,
+                                        end: Alignment.centerLeft,
+                                        colors: [
+                                          Theme.of(context).scaffoldBackgroundColor,
+                                          Theme.of(context).scaffoldBackgroundColor.withOpacity(0.0),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: _SideNavButton(

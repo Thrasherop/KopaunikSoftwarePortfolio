@@ -54,6 +54,15 @@ class _PortfolioCardState extends State<PortfolioCard> {
   ImageStream? _imageStream;
   ImageStreamListener? _imageStreamListener;
   Size? _intrinsicSize; // original pixel size of the image asset
+  bool _lastIsExpanded = false; // track last expansion state to gate animations
+  bool _animateOnThisBuild = false; // only animate when user toggles expand/collapse
+
+  @override
+  void initState() {
+    super.initState();
+    _lastIsExpanded = widget.isExpanded;
+    _animateOnThisBuild = false; // do not animate on first build
+  }
 
   @override
   void didChangeDependencies() {
@@ -86,6 +95,15 @@ class _PortfolioCardState extends State<PortfolioCard> {
       }
     });
     stream.addListener(_imageStreamListener!);
+  }
+
+  @override
+  void didUpdateWidget(covariant PortfolioCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Animate only when the expansion state changes (user interaction),
+    // not when layout recalculates heights (e.g., after image resolves).
+    _animateOnThisBuild = widget.isExpanded != _lastIsExpanded;
+    _lastIsExpanded = widget.isExpanded;
   }
 
   @override
@@ -242,7 +260,7 @@ class _PortfolioCardState extends State<PortfolioCard> {
         // Use TweenAnimationBuilder so inner content sizes with the actual animated height,
         // avoiding a brief overflow while the panel grows/shrinks.
         final Widget panel = TweenAnimationBuilder<double>(
-          duration: const Duration(milliseconds: 220),
+          duration: _animateOnThisBuild ? const Duration(milliseconds: 220) : Duration.zero,
           curve: Curves.easeInOut,
           tween: Tween<double>(begin: bandHeight, end: panelHeight),
           builder: (context, animatedHeight, _) {

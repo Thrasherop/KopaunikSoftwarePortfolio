@@ -139,6 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
           final introText = rawSnapshot.data?['intro'] as String? ?? '';
           final recommendationText =
               rawSnapshot.data?['recommendation'] as String? ?? '';
+          final mobileDisclaimerText = rawSnapshot.data?['mobile_disclaimer'] as String? ?? '';
           final Map<String, dynamic> lovetap =
               (rawSnapshot.data?['lovetap'] as Map<String, dynamic>?) ??
                   const {
@@ -153,6 +154,23 @@ class _MyHomePageState extends State<MyHomePage> {
           final bool edgeFade = ((rawSnapshot.data?['page-config'] as Map<dynamic, dynamic>?)?
                       ['fade-out-cards'] as bool?) ??
               true;
+
+          // Basic mobile detection via viewport size. Keep simple per project rules.
+          final Size screenSize = MediaQuery.of(context).size;
+          final bool isMobile = screenSize.shortestSide < 600;
+
+          if (isMobile) {
+            return CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: HeroHeader(
+                    intro: (mobileDisclaimerText.isNotEmpty ? mobileDisclaimerText : introText),
+                  ),
+                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 48)),
+              ],
+            );
+          }
 
           return FutureBuilder<List<PortfolioItem>>(
             future: _portfolioItems,

@@ -268,6 +268,17 @@ class _LoveTapSectionState extends State<LoveTapSection> {
     out = out.replaceAll(RegExp(r'<\s*/\s*i\s*>', caseSensitive: false), '_');
     out = out.replaceAll(RegExp(r'<\s*em\s*>', caseSensitive: false), '_');
     out = out.replaceAll(RegExp(r'<\s*/\s*em\s*>', caseSensitive: false), '_');
+
+    // Normalize spacing so Markdown renders: remove spaces just inside markers
+    // "** text **" -> "**text**" and "_ text _" -> "_text_"
+    out = out.replaceAllMapped(
+      RegExp(r'\*\*\s+([^*].*?)\s+\*\*'),
+      (m) => '**${m.group(1)}**',
+    );
+    out = out.replaceAllMapped(
+      RegExp(r'_\s+([^_].*?)\s+_'),
+      (m) => '_${m.group(1)}_',
+    );
     return out;
   }
 }

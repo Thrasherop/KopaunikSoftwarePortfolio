@@ -6,6 +6,7 @@ import 'package:portfolio_pair_programmed/widgets/portfolio_card.dart';
 import 'package:portfolio_pair_programmed/widgets/portfolio_carousel.dart';
 import 'package:portfolio_pair_programmed/widgets/hero_header.dart';
 import 'package:portfolio_pair_programmed/widgets/recommendation_section.dart';
+import 'package:portfolio_pair_programmed/widgets/lovetap_section.dart';
 
 void main() {
   runApp(const MyApp());
@@ -138,6 +139,14 @@ class _MyHomePageState extends State<MyHomePage> {
           final introText = rawSnapshot.data?['intro'] as String? ?? '';
           final recommendationText =
               rawSnapshot.data?['recommendation'] as String? ?? '';
+          final Map<String, dynamic> lovetap =
+              (rawSnapshot.data?['lovetap'] as Map<String, dynamic>?) ??
+                  const {
+                    'image': 'assets/lovetap.png',
+                    'description': '',
+                    'technical_details': '',
+                    'analytics': '',
+                  };
           final List<dynamic> order =
               (rawSnapshot.data?['order'] as List<dynamic>? ??
                   ['experiments', 'projects', 'recommendation']);
@@ -169,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       slivers.add(
                         SliverToBoxAdapter(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 24.0),
+                            padding: const EdgeInsets.symmetric(vertical: 48.0),
                             child: PortfolioCarousel(title: 'Projects', items: projects, edgeFade: edgeFade),
                           ),
                         ),
@@ -179,8 +188,24 @@ class _MyHomePageState extends State<MyHomePage> {
                       slivers.add(
                         SliverToBoxAdapter(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 24.0),
+                            padding: const EdgeInsets.symmetric(vertical: 48.0),
                             child: PortfolioCarousel(title: 'Experiments', items: experiments, edgeFade: edgeFade),
+                          ),
+                        ),
+                      );
+                      break;
+                    case 'lovetap':
+                      slivers.add(
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 48.0),
+                            child: LoveTapSection(
+                              imagePath: lovetap['image'] as String? ?? 'assets/lovetap.png',
+                              description: lovetap['description'] as String? ?? '',
+                              technicalDetails: lovetap['technical_details'] as String? ?? '',
+                              analytics: lovetap['analytics'] as String? ?? '',
+                              sectionOrder: (lovetap['order'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? const ['description', 'technical_details', 'analytics'],
+                            ),
                           ),
                         ),
                       );
@@ -188,7 +213,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     case 'recommendation':
                       slivers.add(
                         SliverToBoxAdapter(
-                          child: RecommendationSection(text: recommendationText),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 48.0),
+                            child: RecommendationSection(text: recommendationText),
+                          ),
                         ),
                       );
                       break;

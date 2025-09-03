@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 
 class HeroHeader extends StatelessWidget {
   final String intro;
-  const HeroHeader({super.key, required this.intro});
+  final bool fullHeight; // when true, hero fills viewport height (mobile)
+  const HeroHeader({super.key, required this.intro, this.fullHeight = false});
 
   @override
   Widget build(BuildContext context) {
+    final double containerHeight = fullHeight
+        ? MediaQuery.of(context).size.height
+        : 320;
+
     return Container(
-      height: 320,
+      height: containerHeight,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,

@@ -160,15 +160,9 @@ class _MyHomePageState extends State<MyHomePage> {
           final bool isMobile = screenSize.shortestSide < 600;
 
           if (isMobile) {
-            return CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: HeroHeader(
-                    intro: (mobileDisclaimerText.isNotEmpty ? mobileDisclaimerText : introText),
-                  ),
-                ),
-                const SliverToBoxAdapter(child: SizedBox(height: 48)),
-              ],
+            return HeroHeader(
+              intro: (mobileDisclaimerText.isNotEmpty ? mobileDisclaimerText : introText),
+              fullHeight: true,
             );
           }
 

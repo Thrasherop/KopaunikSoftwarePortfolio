@@ -9,6 +9,8 @@ import 'package:portfolio_pair_programmed/widgets/recommendation_section.dart';
 import 'package:portfolio_pair_programmed/widgets/lovetap_section.dart';
 
 void main() {
+  // Avoid network fetches for Google Fonts; use bundled fonts when available.
+  GoogleFonts.config.allowRuntimeFetching = false;
   runApp(const MyApp());
 }
 

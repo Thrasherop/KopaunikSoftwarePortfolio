@@ -29,10 +29,18 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
+  <!-- Performance: Preconnect to Google Fonts origins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <title>portfolio_pair_programmed</title>
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  <script>
+    // Configure Flutter Web to use the HTML renderer for smaller initial downloads
+    window.flutterConfiguration = { renderer: "html" };
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

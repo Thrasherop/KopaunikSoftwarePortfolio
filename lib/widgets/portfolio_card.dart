@@ -280,7 +280,30 @@ class _PortfolioCardState extends State<PortfolioCard> {
                 border: Border.all(color: Colors.white.withOpacity(0.06)),
               ),
               child: Stack(
+                clipBehavior: Clip.none,
                 children: [
+                  // Soft fade at the very top of the panel to blend with image edge
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    top: -PortfolioCard._panelPadding,
+                    height: PortfolioCard._panelPadding + 24,
+                    child: const IgnorePointer(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black,
+                            ],
+                            stops: [0.0, 1.0],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   // Scrollable content area; scroll only when expanded beyond available height
                   Positioned.fill(
                     child: Column(
@@ -311,7 +334,10 @@ class _PortfolioCardState extends State<PortfolioCard> {
                                   left: 0,
                                   right: 0,
                                   bottom: 0,
-                                  height: 40,
+                                  // Extend the fade upward beyond the inner padding so
+                                  // the gradient actually overlaps the first lines of text
+                                  // instead of mostly covering the padding area.
+                                  height: 72 + PortfolioCard._panelPadding,
                                   child: IgnorePointer(
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -320,8 +346,10 @@ class _PortfolioCardState extends State<PortfolioCard> {
                                           end: Alignment.bottomCenter,
                                           colors: [
                                             Colors.black.withOpacity(0.0),
-                                            Colors.black.withOpacity(0.35),
+                                            Colors.black.withOpacity(0.6),
+                                            Colors.black.withOpacity(0.85),
                                           ],
+                                          stops: const [0.0, 0.6, 1.0],
                                         ),
                                       ),
                                     ),

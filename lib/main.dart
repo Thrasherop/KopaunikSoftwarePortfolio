@@ -7,6 +7,7 @@ import 'package:portfolio_pair_programmed/widgets/portfolio_carousel.dart';
 import 'package:portfolio_pair_programmed/widgets/hero_header.dart';
 import 'package:portfolio_pair_programmed/widgets/recommendation_section.dart';
 import 'package:portfolio_pair_programmed/widgets/lovetap_section.dart';
+import 'package:portfolio_pair_programmed/utils/favicon.dart';
 
 void main() {
   // Avoid network fetches for Google Fonts; use bundled fonts when available.
@@ -58,6 +59,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late Future<Map<String, dynamic>> _rawData;
   late Future<List<PortfolioItem>> _portfolioItems;
+  bool _faviconSet = false;
 
   @override
   void initState() {
@@ -136,6 +138,13 @@ class _MyHomePageState extends State<MyHomePage> {
             return const Center(child: CircularProgressIndicator());
           } else if (rawSnapshot.hasError) {
             return Center(child: Text('Error: ${rawSnapshot.error}'));
+          }
+
+          // Update favicon from JSON once (web no-op elsewhere)
+          final faviconPath = rawSnapshot.data?['website-favicon'] as String?;
+          if (!_faviconSet && (faviconPath != null && faviconPath.isNotEmpty)) {
+            setFaviconHref(faviconPath);
+            _faviconSet = true;
           }
 
           final introText = rawSnapshot.data?['intro'] as String? ?? '';
